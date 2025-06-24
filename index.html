@@ -511,7 +511,7 @@
 
 <div class="success-message" id="successMessage">
     <h2 class="success-title">¡Perfecto! 🔥</h2>
-    <p class="success-text">¡Dale! Te voy a ver el viernes entonces 😎</p>
+    <p class="success-text">Nos vemos el Viernes!! <3</p>
     <div class="celebration-cat">
         <div class="cat-body">
             <div class="cat-paws">
@@ -592,38 +592,49 @@
     const celebration = document.getElementById('celebration');
     const successMessage = document.getElementById('successMessage');
 
-    // Función para obtener posición segura dentro de la pantalla
-    function getSafePosition() {
-        const padding = 50; // Más espacio desde los bordes
-        const btnWidth = 120; // Ancho aproximado del botón
-        const btnHeight = 50; // Alto aproximado del botón
+    // Variables para la posición inicial del botón
+    let btnOriginalX = null;
+    let btnOriginalY = null;
 
-        const maxX = window.innerWidth - btnWidth - padding;
-        const maxY = window.innerHeight - btnHeight - padding;
+    // Función para mover el botón solo un poquito cerca
+    function moveButtonSlightly() {
+        const rect = btnNo.getBoundingClientRect();
 
-        const minX = padding;
-        const minY = padding;
+        // Si es la primera vez, guardar posición original
+        if (btnOriginalX === null) {
+            btnOriginalX = rect.left;
+            btnOriginalY = rect.top;
+        }
 
-        const randomX = Math.random() * (maxX - minX) + minX;
-        const randomY = Math.random() * (maxY - minY) + minY;
+        // Mover solo entre 30-80px de distancia de la posición original
+        const moveDistance = 30 + Math.random() * 50; // Entre 30 y 80px
+        const angle = Math.random() * 2 * Math.PI; // Ángulo aleatorio
 
-        return { x: randomX, y: randomY };
+        let newX = btnOriginalX + Math.cos(angle) * moveDistance;
+        let newY = btnOriginalY + Math.sin(angle) * moveDistance;
+
+        // Asegurar que no se salga de la pantalla
+        const padding = 20;
+        newX = Math.max(padding, Math.min(window.innerWidth - rect.width - padding, newX));
+        newY = Math.max(padding, Math.min(window.innerHeight - rect.height - padding, newY));
+
+        return { x: newX, y: newY };
     }
 
-    // Botón NO que se escapa (ARREGLADO - sin desaparecer)
+    // Botón NO que se escapa poquito
     btnNo.addEventListener('mouseenter', function() {
-        const newPos = getSafePosition();
+        const newPos = moveButtonSlightly();
 
         this.style.position = 'fixed';
         this.style.left = newPos.x + 'px';
         this.style.top = newPos.y + 'px';
-        this.style.zIndex = '9999'; // Z-index muy alto para que siempre esté visible
-        this.style.pointerEvents = 'auto'; // Asegurar que siga siendo clickeable
+        this.style.zIndex = '9999';
+        this.style.pointerEvents = 'auto';
     });
 
     btnNo.addEventListener('click', function(e) {
         e.preventDefault();
-        const newPos = getSafePosition();
+        const newPos = moveButtonSlightly();
 
         this.style.left = newPos.x + 'px';
         this.style.top = newPos.y + 'px';
@@ -633,24 +644,6 @@
         setTimeout(() => {
             this.style.transform = 'scale(1)';
         }, 100);
-    });
-
-    // Detectar cuando el mouse se acerca al botón (área más grande)
-    btnNo.addEventListener('mousemove', function(e) {
-        const rect = this.getBoundingClientRect();
-        const centerX = rect.left + rect.width / 2;
-        const centerY = rect.top + rect.height / 2;
-
-        const distance = Math.sqrt(
-            Math.pow(e.clientX - centerX, 2) + Math.pow(e.clientY - centerY, 2)
-        );
-
-        // Si el mouse está muy cerca (menos de 80px), mover el botón
-        if (distance < 80) {
-            const newPos = getSafePosition();
-            this.style.left = newPos.x + 'px';
-            this.style.top = newPos.y + 'px';
-        }
     });
 
     // Botón SÍ que desata la fiesta
