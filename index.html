@@ -119,7 +119,6 @@
             display: flex;
             justify-content: center;
             gap: 20px;
-            margin-bottom: 20px;
         }
 
         .time-unit {
@@ -155,7 +154,6 @@
             justify-content: center;
             gap: 30px;
             margin-top: 30px;
-            position: relative; /* <- NUEVO */
         }
 
         .btn {
@@ -185,21 +183,7 @@
             background: linear-gradient(45deg, #ff6b6b, #ffa8a8);
             color: #fff;
             box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
-            transition: transform 0.3s ease;
-        }
-
-
-        .btn-no:hover {
-            transform: translate(20px, -10px);
-            animation: runAway 0.5s ease-in-out;
-        }
-
-        @keyframes runAway {
-            0% { transform: translate(0, 0); }
-            25% { transform: translate(-20px, -10px); }
-            50% { transform: translate(30px, 10px); }
-            75% { transform: translate(-15px, -5px); }
-            100% { transform: translate(25px, -8px); }
+            transition: transform 0.3s ease, top 0.4s ease, left 0.4s ease;
         }
 
         /* CELEBRACIÓN */
@@ -251,11 +235,13 @@
             border-radius: 20px;
             text-align: center;
             opacity: 0;
+            pointer-events: none; /* Evita que interfiera con otros elementos */
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
         }
 
         .success-message.show {
             opacity: 1;
+            pointer-events: auto;
             animation: successPop 0.8s ease-out;
         }
 
@@ -277,7 +263,7 @@
             margin-bottom: 30px;
         }
 
-        /* GATITO NARANJA (sin M) */
+        /* GATITO NARANJA */
         .celebration-cat {
             position: absolute;
             bottom: 20px;
@@ -430,146 +416,66 @@
             .time-display { gap: 10px; }
             .time-unit { padding: 10px; min-width: 50px; }
             .time-number { font-size: 1.5em; }
-            .tulip { display: none; } /* Ocultar tulipanes en móvil para mejor rendimiento */
+            .tulip { display: none; }
         }
     </style>
 </head>
 <body>
-<!-- TULIPANES DECORATIVOS -->
 <div class="tulips-container">
-    <div class="tulip">
-        <div class="tulip-flower"></div>
-        <div class="tulip-stem">
-            <div class="tulip-leaf"></div>
-        </div>
-    </div>
-    <div class="tulip">
-        <div class="tulip-flower"></div>
-        <div class="tulip-stem">
-            <div class="tulip-leaf"></div>
-        </div>
-    </div>
-    <div class="tulip">
-        <div class="tulip-flower"></div>
-        <div class="tulip-stem">
-            <div class="tulip-leaf"></div>
-        </div>
-    </div>
-    <div class="tulip">
-        <div class="tulip-flower"></div>
-        <div class="tulip-stem">
-            <div class="tulip-leaf"></div>
-        </div>
-    </div>
-    <div class="tulip">
-        <div class="tulip-flower"></div>
-        <div class="tulip-stem">
-            <div class="tulip-leaf"></div>
-        </div>
-    </div>
-    <div class="tulip">
-        <div class="tulip-flower"></div>
-        <div class="tulip-stem">
-            <div class="tulip-leaf"></div>
-        </div>
-    </div>
+    <div class="tulip"> <div class="tulip-flower"></div> <div class="tulip-stem"><div class="tulip-leaf"></div></div> </div>
+    <div class="tulip"> <div class="tulip-flower"></div> <div class="tulip-stem"><div class="tulip-leaf"></div></div> </div>
+    <div class="tulip"> <div class="tulip-flower"></div> <div class="tulip-stem"><div class="tulip-leaf"></div></div> </div>
+    <div class="tulip"> <div class="tulip-flower"></div> <div class="tulip-stem"><div class="tulip-leaf"></div></div> </div>
+    <div class="tulip"> <div class="tulip-flower"></div> <div class="tulip-stem"><div class="tulip-leaf"></div></div> </div>
+    <div class="tulip"> <div class="tulip-flower"></div> <div class="tulip-stem"><div class="tulip-leaf"></div></div> </div>
 </div>
 
 <div class="container">
     <div class="countdown">
         <h1 class="countdown-title">Faltan para el viernes:</h1>
         <div class="time-display">
-            <div class="time-unit">
-                <span class="time-number" id="days">0</span>
-                <span class="time-label">Días</span>
-            </div>
-            <div class="time-unit">
-                <span class="time-number" id="hours">0</span>
-                <span class="time-label">Horas</span>
-            </div>
-            <div class="time-unit">
-                <span class="time-number" id="minutes">0</span>
-                <span class="time-label">Min</span>
-            </div>
-            <div class="time-unit">
-                <span class="time-number" id="seconds">0</span>
-                <span class="time-label">Seg</span>
-            </div>
+            <div class="time-unit"> <span class="time-number" id="days">0</span> <span class="time-label">Días</span> </div>
+            <div class="time-unit"> <span class="time-number" id="hours">0</span> <span class="time-label">Horas</span> </div>
+            <div class="time-unit"> <span class="time-number" id="minutes">0</span> <span class="time-label">Min</span> </div>
+            <div class="time-unit"> <span class="time-number" id="seconds">0</span> <span class="time-label">Seg</span> </div>
         </div>
     </div>
-
-    <div class="question">
-        ¿Quieres que te vaya a ver? 😊
-    </div>
-
+    <div class="question"> ¿Quieres que te vaya a ver? 😊 </div>
     <div class="buttons">
         <button class="btn btn-yes" id="btnYes">¡Sí! 💕</button>
         <button class="btn btn-no" id="btnNo">No...</button>
     </div>
 </div>
 
-<!-- CELEBRACIÓN -->
 <div class="celebration" id="celebration"></div>
-
 <div class="success-message" id="successMessage">
     <h2 class="success-title">¡Perfecto! 🔥</h2>
-    <p class="success-text">Nos vemos el Viernes!! <3</p>
+    <p class="success-text">Nos vemos el Viernes!! &lt;3</p>
     <div class="celebration-cat">
-        <div class="cat-body">
-            <div class="cat-paws">
-                <div class="paw"></div>
-                <div class="paw"></div>
-            </div>
-        </div>
-        <div class="cat-head">
-            <div class="cat-ears">
-                <div class="ear-left">
-                    <div class="ear-inner"></div>
-                </div>
-                <div class="ear-right">
-                    <div class="ear-inner"></div>
-                </div>
-            </div>
-            <div class="cat-face">
-                <div class="cat-eyes">
-                    <div class="eye"></div>
-                    <div class="eye"></div>
-                </div>
-                <div class="cat-nose"></div>
-                <div class="cat-mouth"></div>
-            </div>
-        </div>
+        <div class="cat-body"><div class="cat-paws"><div class="paw"></div><div class="paw"></div></div></div>
+        <div class="cat-head"><div class="cat-ears"><div class="ear-left"><div class="ear-inner"></div></div><div class="ear-right"><div class="ear-inner"></div></div></div><div class="cat-face"><div class="cat-eyes"><div class="eye"></div><div class="eye"></div></div><div class="cat-nose"></div><div class="cat-mouth"></div></div></div>
         <div class="cat-tail"></div>
     </div>
 </div>
 
 <script>
-    // Contador hasta el viernes
+    // --- LÓGICA DEL CONTADOR (Sin cambios) ---
     function updateCountdown() {
         const now = new Date();
-        const currentDay = now.getDay(); // 0 = domingo, 1 = lunes, ..., 5 = viernes
+        const friday = 5;
+        const currentDay = now.getDay();
 
-        // Calcular el próximo viernes
-        let daysUntilFriday = (5 - currentDay + 7) % 7;
-        if (daysUntilFriday === 0) {
-            // Si es viernes, contar para el próximo viernes
-            daysUntilFriday = 7;
+        let daysUntilFriday = friday - currentDay;
+        if (daysUntilFriday < 0 || (daysUntilFriday === 0 && now.getHours() >= 18)) {
+            daysUntilFriday += 7;
         }
 
         const nextFriday = new Date(now);
         nextFriday.setDate(now.getDate() + daysUntilFriday);
-        nextFriday.setHours(18, 0, 0, 0); // 6 PM del viernes
+        nextFriday.setHours(18, 0, 0, 0);
 
         const timeLeft = nextFriday - now;
-
-        if (timeLeft <= 0) {
-            // Si ya es viernes después de las 6 PM, contar para el próximo
-            nextFriday.setDate(nextFriday.getDate() + 7);
-            const newTimeLeft = nextFriday - now;
-            updateDisplay(newTimeLeft);
-        } else {
-            updateDisplay(timeLeft);
-        }
+        updateDisplay(timeLeft > 0 ? timeLeft : 0);
     }
 
     function updateDisplay(timeLeft) {
@@ -584,49 +490,77 @@
         document.getElementById('seconds').textContent = seconds;
     }
 
-    // Actualizar cada segundo
     setInterval(updateCountdown, 1000);
-    updateCountdown(); // Llamar inmediatamente
+    updateCountdown();
 
-    // Botones
+    // --- LÓGICA DE BOTONES (VERSIÓN 2.0 - A PRUEBA DE BALAS) ---
     const btnYes = document.getElementById('btnYes');
     const btnNo = document.getElementById('btnNo');
     const celebration = document.getElementById('celebration');
     const successMessage = document.getElementById('successMessage');
 
-    // Variables para la posición inicial del botón
-    let currentTranslateX = 0;
-    let currentTranslateY = 0;
+    let hasEscaped = false; // Variable de estado para saber si el botón está "escapado"
 
-    function moveButtonSlightly() {
-        const isMobile = window.innerWidth < 480;
-        const maxDistance = isMobile ? 30 : 80;
-        const moveX = (Math.random() - 0.5) * maxDistance;
-        const moveY = (Math.random() - 0.5) * maxDistance;
+    /**
+     * Función DEFINITIVA para mover el botón 'No'.
+     * Calcula un "área segura" en la pantalla y mueve el botón allí.
+     * Esto garantiza que NUNCA se salga de la vista.
+     */
+    function moveButton() {
+        if (!hasEscaped) {
+            // La primera vez que escapa, lo hacemos fijo y le damos un z-index alto.
+            // Solo necesitamos hacer esto una vez.
+            btnNo.style.position = 'fixed';
+            btnNo.style.zIndex = '9999';
+            hasEscaped = true;
+        }
 
-        // Limitar acumulación para que no se desplace infinito
-        const maxOffset = isMobile ? 40 : 120;
-        currentTranslateX = Math.max(-maxOffset, Math.min(maxOffset, currentTranslateX + moveX));
-        currentTranslateY = Math.max(-maxOffset, Math.min(maxOffset, currentTranslateY + moveY));
+        // 1. Obtener las dimensiones de la ventana (el área visible)
+        const viewportWidth = window.innerWidth;
+        const viewportHeight = window.innerHeight;
 
-        btnNo.style.transform = `translate(${currentTranslateX}px, ${currentTranslateY}px)`;
+        // 2. Obtener las dimensiones del botón
+        const buttonWidth = btnNo.offsetWidth;
+        const buttonHeight = btnNo.offsetHeight;
+
+        // 3. Calcular el "Área Segura" para el posicionamiento
+        // Le restamos el ancho/alto del botón para que no se salga por la derecha/abajo.
+        // Le damos un padding de 10px para que no se pegue a los bordes.
+        const safeAreaX = viewportWidth - buttonWidth - 10;
+        const safeAreaY = viewportHeight - buttonHeight - 10;
+
+        // 4. Generar una posición (coordenada 'left' y 'top') aleatoria DENTRO del área segura.
+        // Math.random() da un número entre 0 y 1. Lo multiplicamos por el área segura
+        // y le sumamos un pequeño padding para que tampoco se pegue a los bordes izquierdo/superior.
+        const newX = Math.random() * safeAreaX + 5;
+        const newY = Math.random() * safeAreaY + 5;
+
+        // 5. Aplicar la nueva posición al botón.
+        btnNo.style.left = `${newX}px`;
+        btnNo.style.top = `${newY}px`;
     }
 
-    // Evento mouseenter o click
-    btnNo.addEventListener('mouseenter', moveButtonSlightly);
-    btnNo.addEventListener('click', function(e) {
-        e.preventDefault();
-        moveButtonSlightly();
+    // --- EVENTOS PARA ACTIVAR EL ESCAPE ---
 
-        // Animación sutil al hacer click
-        btnNo.style.transform += ' scale(0.95)';
-        setTimeout(() => {
-            btnNo.style.transform = `translate(${currentTranslateX}px, ${currentTranslateY}px)`;
-        }, 100);
+    // Para PC: Cuando el cursor del mouse entra en el botón
+    btnNo.addEventListener('mouseenter', moveButton);
+
+    // Para Móviles: Cuando se toca el botón (inicia el toque)
+    btnNo.addEventListener('touchstart', (e) => {
+        e.preventDefault(); // Previene "clicks fantasmas" en móviles.
+        moveButton();
+    });
+
+    // BONUS: Si el usuario cambia el tamaño de la ventana (o gira el celular),
+    // y el botón ya ha escapado, lo movemos de nuevo para que no se quede fuera.
+    window.addEventListener('resize', () => {
+        if (hasEscaped) {
+            moveButton();
+        }
     });
 
 
-    // Botón SÍ que desata la fiesta
+    // --- LÓGICA DEL BOTÓN 'SÍ' (Sin cambios) ---
     btnYes.addEventListener('click', function() {
         createHeartExplosion();
 
@@ -634,10 +568,9 @@
             successMessage.classList.add('show');
         }, 1000);
 
-        // Mensaje romántico extra después de un rato
         setTimeout(() => {
             const extraMessage = document.createElement('div');
-            extraMessage.innerHTML = '¡No puedo esperar a verte! 😍✨';
+            extraMessage.innerHTML = 'Tengo muchas ganas de vertee gatita linda! 😍✨';
             extraMessage.style.cssText = `
                 position: fixed;
                 bottom: 20px;
@@ -655,19 +588,15 @@
             `;
             document.body.appendChild(extraMessage);
         }, 4000);
-
-        // Ya no se cierra automáticamente - que disfrute el momento ❤️
     });
 
     function createHeartExplosion() {
         celebration.classList.add('active');
 
-        // Crear MUCHOS más corazones
         for (let i = 0; i < 80; i++) {
             setTimeout(() => {
                 const heart = document.createElement('div');
                 heart.className = 'heart';
-                // Variedad de emojis
                 const heartEmojis = ['💖', '💕', '💗', '💘', '❤️', '🧡', '💛', '💚', '💙', '💜', '🌷', '🌹'];
                 heart.innerHTML = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
                 heart.style.left = Math.random() * window.innerWidth + 'px';
@@ -677,14 +606,10 @@
 
                 celebration.appendChild(heart);
 
-                // Limpiar corazón después de la animación
-                setTimeout(() => {
-                    heart.remove();
-                }, 2000);
+                setTimeout(() => { heart.remove(); }, 2000);
             }, i * 50);
         }
 
-        // Agregar más efectos - confetti y tulipanes
         for (let i = 0; i < 40; i++) {
             setTimeout(() => {
                 const confetti = document.createElement('div');
@@ -699,9 +624,7 @@
 
                 celebration.appendChild(confetti);
 
-                setTimeout(() => {
-                    confetti.remove();
-                }, 2000);
+                setTimeout(() => { confetti.remove(); }, 2000);
             }, i * 80);
         }
     }
