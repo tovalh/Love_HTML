@@ -240,27 +240,28 @@
 
         .cat-ears {
             position: absolute;
-            top: -10px;
+            top: -5px;
+            width: 100%;
         }
 
         .ear-left, .ear-right {
-            width: 15px;
-            height: 18px;
+            width: 12px;
+            height: 15px;
             background: linear-gradient(135deg, #ff7f00, #ff6300);
             border-radius: 80% 20% 80% 20%;
             position: absolute;
         }
 
-        .ear-left { left: 10px; transform: rotate(-20deg); }
-        .ear-right { right: 10px; transform: rotate(20deg); }
+        .ear-left { left: 5px; transform: rotate(-25deg); }
+        .ear-right { right: 5px; transform: rotate(25deg); }
 
         .ear-inner {
-            width: 8px;
-            height: 10px;
+            width: 6px;
+            height: 8px;
             background: #ffb366;
             border-radius: 50%;
             position: absolute;
-            top: 4px;
+            top: 2px;
             left: 3px;
         }
 
@@ -400,8 +401,8 @@
 <div class="celebration" id="celebration"></div>
 
 <div class="success-message" id="successMessage">
-    <h2 class="success-title">¡Yay! 🎉</h2>
-    <p class="success-text">¡Perfecto! Nos vemos el viernes entonces 😄</p>
+    <h2 class="success-title">¡Perfecto! 🔥</h2>
+    <p class="success-text">¡Dale! Te voy a ver el viernes entonces 😎</p>
     <div class="celebration-cat">
         <div class="cat-body">
             <div class="cat-paws">
@@ -515,15 +516,18 @@
     function createHeartExplosion() {
         celebration.classList.add('active');
 
-        // Crear muchos corazones
-        for (let i = 0; i < 30; i++) {
+        // Crear MUCHOS más corazones
+        for (let i = 0; i < 80; i++) {
             setTimeout(() => {
                 const heart = document.createElement('div');
                 heart.className = 'heart';
-                heart.innerHTML = '💖';
+                // Variedad de emojis
+                const heartEmojis = ['💖', '💕', '💗', '💘', '❤️', '🧡', '💛', '💚', '💙', '💜'];
+                heart.innerHTML = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
                 heart.style.left = Math.random() * window.innerWidth + 'px';
                 heart.style.top = Math.random() * window.innerHeight + 'px';
-                heart.style.animationDelay = Math.random() * 0.5 + 's';
+                heart.style.animationDelay = Math.random() * 0.3 + 's';
+                heart.style.fontSize = (Math.random() * 20 + 20) + 'px';
 
                 celebration.appendChild(heart);
 
@@ -531,7 +535,27 @@
                 setTimeout(() => {
                     heart.remove();
                 }, 2000);
-            }, i * 100);
+            }, i * 50);
+        }
+
+        // Agregar más efectos - confetti
+        for (let i = 0; i < 40; i++) {
+            setTimeout(() => {
+                const confetti = document.createElement('div');
+                confetti.className = 'heart';
+                confetti.innerHTML = '✨';
+                confetti.style.left = Math.random() * window.innerWidth + 'px';
+                confetti.style.top = Math.random() * window.innerHeight + 'px';
+                confetti.style.animationDelay = Math.random() * 0.5 + 's';
+                confetti.style.fontSize = (Math.random() * 15 + 15) + 'px';
+                confetti.style.color = '#ffd700';
+
+                celebration.appendChild(confetti);
+
+                setTimeout(() => {
+                    confetti.remove();
+                }, 2000);
+            }, i * 80);
         }
     }
 </script>
