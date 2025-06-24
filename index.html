@@ -504,14 +504,18 @@
 
     // Botón SÍ que desata la fiesta
     btnYes.addEventListener('click', function() {
-        // Explosión de corazones
         createHeartExplosion();
 
-        // Mostrar mensaje de éxito
         setTimeout(() => {
             successMessage.classList.add('show');
         }, 1000);
+
+        // Salir automáticamente después de 6 segundos
+        setTimeout(() => {
+            window.close(); // no funcionará fuera de ventana abierta por script
+        }, 6000);
     });
+
 
     function createHeartExplosion() {
         celebration.classList.add('active');
@@ -558,6 +562,21 @@
             }, i * 80);
         }
     }
+
+    let moveNoButton = true;
+
+    function moveNoBtnRandomly() {
+        if (!moveNoButton) return;
+
+        const randomX = Math.random() * (window.innerWidth - 200);
+        const randomY = Math.random() * (window.innerHeight - 100);
+        btnNo.style.position = 'fixed';
+        btnNo.style.left = randomX + 'px';
+        btnNo.style.top = randomY + 'px';
+    }
+
+    setInterval(moveNoBtnRandomly, 1500); // Se moverá cada 1.5 segundos
+
 </script>
 </body>
 </html>
