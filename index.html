@@ -155,6 +155,7 @@
             justify-content: center;
             gap: 30px;
             margin-top: 30px;
+            position: relative; /* <- NUEVO */
         }
 
         .btn {
@@ -184,8 +185,9 @@
             background: linear-gradient(45deg, #ff6b6b, #ffa8a8);
             color: #fff;
             box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
-            transition: all 0.3s ease;
+            transition: transform 0.3s ease;
         }
+
 
         .btn-no:hover {
             transform: translate(20px, -10px);
@@ -593,58 +595,36 @@
     const successMessage = document.getElementById('successMessage');
 
     // Variables para la posición inicial del botón
-    let btnOriginalX = null;
-    let btnOriginalY = null;
+    let currentTranslateX = 0;
+    let currentTranslateY = 0;
 
-    // Función para mover el botón solo un poquito cerca
     function moveButtonSlightly() {
-        const rect = btnNo.getBoundingClientRect();
+        const isMobile = window.innerWidth < 480;
+        const maxDistance = isMobile ? 30 : 80;
+        const moveX = (Math.random() - 0.5) * maxDistance;
+        const moveY = (Math.random() - 0.5) * maxDistance;
 
-        // Si es la primera vez, guardar posición original
-        if (btnOriginalX === null) {
-            btnOriginalX = rect.left;
-            btnOriginalY = rect.top;
-        }
+        // Limitar acumulación para que no se desplace infinito
+        const maxOffset = isMobile ? 40 : 120;
+        currentTranslateX = Math.max(-maxOffset, Math.min(maxOffset, currentTranslateX + moveX));
+        currentTranslateY = Math.max(-maxOffset, Math.min(maxOffset, currentTranslateY + moveY));
 
-        // Mover solo entre 30-80px de distancia de la posición original
-        const moveDistance = 30 + Math.random() * 50; // Entre 30 y 80px
-        const angle = Math.random() * 2 * Math.PI; // Ángulo aleatorio
-
-        let newX = btnOriginalX + Math.cos(angle) * moveDistance;
-        let newY = btnOriginalY + Math.sin(angle) * moveDistance;
-
-        // Asegurar que no se salga de la pantalla
-        const padding = 20;
-        newX = Math.max(padding, Math.min(window.innerWidth - rect.width - padding, newX));
-        newY = Math.max(padding, Math.min(window.innerHeight - rect.height - padding, newY));
-
-        return { x: newX, y: newY };
+        btnNo.style.transform = `translate(${currentTranslateX}px, ${currentTranslateY}px)`;
     }
 
-    // Botón NO que se escapa poquito
-    btnNo.addEventListener('mouseenter', function() {
-        const newPos = moveButtonSlightly();
-
-        this.style.position = 'fixed';
-        this.style.left = newPos.x + 'px';
-        this.style.top = newPos.y + 'px';
-        this.style.zIndex = '9999';
-        this.style.pointerEvents = 'auto';
-    });
-
+    // Evento mouseenter o click
+    btnNo.addEventListener('mouseenter', moveButtonSlightly);
     btnNo.addEventListener('click', function(e) {
         e.preventDefault();
-        const newPos = moveButtonSlightly();
+        moveButtonSlightly();
 
-        this.style.left = newPos.x + 'px';
-        this.style.top = newPos.y + 'px';
-
-        // Agregar un pequeño "temblor" cuando hacen click
-        this.style.transform = 'scale(0.9)';
+        // Animación sutil al hacer click
+        btnNo.style.transform += ' scale(0.95)';
         setTimeout(() => {
-            this.style.transform = 'scale(1)';
+            btnNo.style.transform = `translate(${currentTranslateX}px, ${currentTranslateY}px)`;
         }, 100);
     });
+
 
     // Botón SÍ que desata la fiesta
     btnYes.addEventListener('click', function() {
